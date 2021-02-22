@@ -16,11 +16,28 @@ function changeDialValue (index, incrementBy) {
   // for example, if the user clicked the "down" arrow for the last wheel
   // this will be called with arguments (3, -1).
 
+  if (!(lockState.wheels[index] + incrementBy > 9) && !(lockState.wheels[index] + incrementBy < 0)) {
+    lockState.wheels[index] += incrementBy
+  }
+
   // to change the state of the lock, simply make a call like
   // lockState.locked = false
   // or lockState.wheels[1] = 2
   // the lock will re-render itself when the value changes
+  let isLocked = false
+  for (let i = 0; i < SECRET_COMBO.length; i++) {
+    if (lockState.wheels[i] !== SECRET_COMBO[i]) {
+      isLocked = true
+      break
+    }
+  }
+  if (!isLocked) {
+    lockState.locked = false
+  }
 
+  if (!lockState.locked) {
+    redirect('larry-lobster')
+  }
   // When the lock is set to match the secretCombo
   // call the redirect() function with your name
   // eg: redirect('larry-lobster')
